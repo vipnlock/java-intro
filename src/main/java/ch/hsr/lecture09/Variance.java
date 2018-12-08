@@ -1,9 +1,8 @@
 package ch.hsr.lecture09;
 
-import ch.hsr.lecture09.dto.Circle;
-import ch.hsr.lecture09.dto.Graphik;
-import ch.hsr.lecture09.dto.Rectangle;
-import ch.hsr.lecture09.dto.Square;
+import ch.hsr.commons.graphik.Graphik;
+import ch.hsr.commons.graphik.Rectangle;
+import ch.hsr.commons.graphik.Square;
 import ch.hsr.lecture09.stack.Stack;
 
 public class Variance {

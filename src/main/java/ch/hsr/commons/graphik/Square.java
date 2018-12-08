@@ -1,4 +1,4 @@
-package ch.hsr.lecture09.dto;
+package ch.hsr.commons.graphik;
 
 public class Square extends Rectangle {
     @Override

@@ -2,8 +2,7 @@ package ch.hsr.lecture09.stack;
 
 import java.io.Serializable;
 
-import ch.hsr.lecture09.dto.Graphik;
-import ch.hsr.lecture09.stack.Stack;
+import ch.hsr.commons.graphik.Graphik;
 
 /**
  *

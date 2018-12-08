@@ -1,4 +1,4 @@
-package ch.hsr.lecture09.dto;
+package ch.hsr.commons.graphik;
 
 import java.io.Serializable;
 
