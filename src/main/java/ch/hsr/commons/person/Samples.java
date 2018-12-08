@@ -15,7 +15,7 @@ public class Samples {
         result.add(new Person("Kim", "Campbell" , 40, "Halifax"));
         result.add(new Person("Elizabeth", "May", 66, "Hamilton"));
         result.add(new Person("Paul", "Martin", 85, "Vancouver"));
-        result.add(new Person("Justin", "Trudoe", 91, "Vancouver"));
+        result.add(new Person("Justin", "Trudoe", 85, "Vancouver"));
 
         return result;
     }

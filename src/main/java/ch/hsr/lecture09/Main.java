@@ -8,6 +8,20 @@ import ch.hsr.lecture09.stack.ArrayStackCast2;
 import ch.hsr.lecture09.stack.GraphikStack;
 import ch.hsr.lecture09.stack.Stack;
 
+/**
+ * Generics.
+ *
+ * Statischer Polymorphismus
+ * -> generische Klasse
+ * -> generische Schnittstelle
+ * -> generische Methode
+ * Type Erasure
+ * -> Generics limitations
+ * Type Bounds:
+ * -> generische Invarianz
+ * -> Co-Varianz
+ * -> Contra-Varianz
+ */
 public class Main {
 
     public static void main(String[] argv) {
