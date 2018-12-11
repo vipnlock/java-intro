@@ -1,6 +1,6 @@
 package com.skiena.chapter5.dto;
 
-public enum NodeState {
+public enum VertexState {
 
     UNDISCOVERED,
     DISCOVERED,

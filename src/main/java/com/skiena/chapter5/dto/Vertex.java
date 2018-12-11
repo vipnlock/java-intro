@@ -1,13 +1,13 @@
 package com.skiena.chapter5.dto;
 
-public class Node {
+public class Vertex {
 
     private final int id;
 
     private final int value1;
     private final int value2;
 
-    public Node(int id, int value1, int value2) {
+    public Vertex(int id, int value1, int value2) {
         this.id = id;
         this.value1 = value1;
         this.value2 = value2;

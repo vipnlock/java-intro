@@ -2,19 +2,19 @@ package com.skiena.chapter5.dto;
 
 public class EdgeNode {
 
-    private final int nodeId;
+    private final int vertexId;
 
     private final int weight;
 
     private EdgeNode next;
 
-    public EdgeNode(int nodeId, int weight) {
-        this.nodeId = nodeId;
+    public EdgeNode(int vertexId, int weight) {
+        this.vertexId = vertexId;
         this.weight = weight;
     }
 
-    public int getNodeId() {
-        return nodeId;
+    public int getVertexId() {
+        return vertexId;
     }
 
     public int getWeight() {

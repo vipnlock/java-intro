@@ -1,7 +1,7 @@
 package com.skiena.chapter5;
 
 import com.skiena.chapter5.dto.Graph;
-import com.skiena.chapter5.dto.Node;
+import com.skiena.chapter5.dto.Vertex;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,14 +44,14 @@ public class GraphReader {
                         var id = Integer.parseInt(matcher.group(1));
                         var value1 = Integer.parseInt(matcher.group(2));
                         var value2 = Integer.parseInt(matcher.group(3));
-                        graph.insertVertex(id, new Node(id, value1, value2));
+                        graph.insertVertex(id, new Vertex(id, value1, value2));
 
                     } else {
                         matcher = EDGE_PATTERN.matcher(line);
                         if (matcher.matches()) {
-                            var node1Id = Integer.parseInt(matcher.group(1));
-                            var node2Id = Integer.parseInt(matcher.group(2));
-                            graph.insertEdge(node1Id, node2Id);
+                            var v1Id = Integer.parseInt(matcher.group(1));
+                            var v2Id = Integer.parseInt(matcher.group(2));
+                            graph.insertEdge(v1Id, v2Id);
                         }
                     }
                 }
