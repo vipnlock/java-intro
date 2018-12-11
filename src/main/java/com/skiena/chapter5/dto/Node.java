@@ -2,30 +2,31 @@ package com.skiena.chapter5.dto;
 
 public class Node {
 
-    private final int value;
+    private final int id;
 
-    private final int weight;
+    private final int value1;
+    private final int value2;
 
-    private Node next;
-
-    public Node(int value, int weight) {
-        this.value = value;
-        this.weight = weight;
+    public Node(int id, int value1, int value2) {
+        this.id = id;
+        this.value1 = value1;
+        this.value2 = value2;
     }
 
-    public int getValue() {
-        return value;
+    public int getId() {
+        return id;
     }
 
-    public int getWeight() {
-        return weight;
+    public int getValue1() {
+        return value1;
     }
 
-    public Node getNext() {
-        return next;
-    }
-    public void setNext(Node next) {
-        this.next = next;
+    public int getValue2() {
+        return value2;
     }
 
+    @Override
+    public String toString() {
+        return id + "(" + value1 + "," + value2 + ")";
+    }
 }

@@ -1,54 +1,72 @@
 package com.skiena.chapter5;
 
 import com.skiena.chapter5.dto.Graph;
+import com.skiena.chapter5.dto.Node;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class GraphReader {
 
     private static final Pattern CAPTION_PATTERN = Pattern.compile("(\\d+);(\\d+);(true|false)");
-    private static final String NODE_PATTERN_STR = "\\((\\d+),(\\d+)\\)";
-    private static final Pattern NODE_PATTERN = Pattern.compile(NODE_PATTERN_STR);
+    private static final String VERTEX_PATTERN_STR = "(\\d+):(\\d+),(\\d+)";
+    private static final String EDGE_PATTERN_STR = "\\((\\d+),(\\d+)\\)";
+    private static final Pattern VERTEX_PATTERN = Pattern.compile(VERTEX_PATTERN_STR);
+    private static final Pattern EDGE_PATTERN = Pattern.compile(EDGE_PATTERN_STR);
 
     public Graph read(File in) throws IOException {
-        final var graphOptional = Files.lines(in.toPath())
-                .filter(line -> !line.startsWith("#"))
-                .limit(1)
-                .map(line -> {
+        Graph graph = null;
+        int verticesCount = 0;
+        int edgesCount = 0;
+
+        // parse first line
+        try (final FileReader fr = new FileReader(in);
+             final BufferedReader br = new BufferedReader(fr)) {
+            String line;
+            while ((line = br.readLine()) != null ) {
+                if (line.startsWith("#")) {
+                    continue;
+                }
+                if (graph == null) {
                     var matcher = CAPTION_PATTERN.matcher(line);
                     if (matcher.matches()) {
-                        final int verticesCount = Integer.parseInt(matcher.group(1));
-                        final int edgesCount = Integer.parseInt(matcher.group(2));
+                        verticesCount = Integer.parseInt(matcher.group(1));
+                        edgesCount = Integer.parseInt(matcher.group(2));
                         final boolean directed = Boolean.parseBoolean(matcher.group(3));
-                        return new Graph(verticesCount, directed);
+                        graph = new Graph(directed);
                     }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .findFirst();
+                } else {
+                    var matcher = VERTEX_PATTERN.matcher(line);
+                    if (matcher.matches()) {
+                        var id = Integer.parseInt(matcher.group(1));
+                        var value1 = Integer.parseInt(matcher.group(2));
+                        var value2 = Integer.parseInt(matcher.group(3));
+                        graph.insertVertex(id, new Node(id, value1, value2));
 
-        if (graphOptional.isPresent()) {
-            var graph = graphOptional.get();
-
-            Files.lines(in.toPath())
-                    .filter(line -> line.matches(NODE_PATTERN_STR))
-                    .forEach(line -> {
-                        var matcher = NODE_PATTERN.matcher(line);
-                        matcher.matches();
-                        var x = Integer.parseInt(matcher.group(1));
-                        var y = Integer.parseInt(matcher.group(2));
-
-                        graph.insertEdge(x, y);
-                    });
-
-            return graph;
-        } else {
-            return null;
+                    } else {
+                        matcher = EDGE_PATTERN.matcher(line);
+                        if (matcher.matches()) {
+                            var node1Id = Integer.parseInt(matcher.group(1));
+                            var node2Id = Integer.parseInt(matcher.group(2));
+                            graph.insertEdge(node1Id, node2Id);
+                        }
+                    }
+                }
+            }
         }
+
+        if (graph != null) {
+            if (verticesCount != graph.getVerticesCount()) {
+                throw new IllegalStateException("Number of vertices does not match: " + verticesCount + " != " + graph.getVerticesCount());
+            }
+            if (edgesCount != graph.getEdgesCount()) {
+                throw new IllegalStateException("Number of edges does not match: " + edgesCount + " != " + graph.getEdgesCount());
+            }
+        }
+        return graph;
     }
 
 }

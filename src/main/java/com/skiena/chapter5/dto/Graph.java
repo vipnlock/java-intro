@@ -4,39 +4,63 @@ public class Graph {
 
     private static final int MAX_NODE_COUNT = 1000;
 
-    private final Node[] edges = new Node[MAX_NODE_COUNT + 1];
-    private final int[] degree = new int[MAX_NODE_COUNT + 1];
-
-    private final int verticesCount;
-    private int edgesCount;
-
     private final boolean directed;
 
-    public Graph(final int verticesCount,
-                 final boolean directed) {
-        this.verticesCount = verticesCount;
+    private int verticesCount;
+    private final Node[] vertices = new Node[MAX_NODE_COUNT + 1];
+    private final int[] degree = new int[MAX_NODE_COUNT + 1];
+
+    private int edgesCount;
+    private final EdgeNode[] edges = new EdgeNode[MAX_NODE_COUNT + 1];
+
+    public Graph(final boolean directed) {
         this.directed = directed;
     }
 
-    public void insertEdge(final int x, final int y) {
-        this.insertEdge(x, y, directed);
+    public void insertVertex(final int id, final Node node) {
+        if (id > MAX_NODE_COUNT) {
+            throw new IllegalStateException("Node is out of bounds: id = " + id + " (limit: " + MAX_NODE_COUNT + ")");
+        }
+        vertices[id] = node;
+        verticesCount++;
     }
 
-    private void insertEdge(final int x, final int y, final boolean directed) {
-        if (x >= MAX_NODE_COUNT || y >= MAX_NODE_COUNT) {
-            throw new IllegalStateException("Node is out of bounds: " + x + ", " + y + " (limit: " + MAX_NODE_COUNT + ")");
-        }
-        var tmp = edges[x];
-        edges[x] = new Node(y, 0);
-        edges[x].setNext(tmp);
+    public void insertEdge(final int node1Id, final int node2Id) {
+        this.insertEdge(node1Id, node2Id, directed);
+    }
 
-        degree[x]++;
+    private void insertEdge(final int node1Id, final int node2Id, final boolean directed) {
+        var tmp = edges[node1Id];
+        edges[node1Id] = new EdgeNode(node2Id,0);
+        edges[node1Id].setNext(tmp);
+
+        degree[node1Id]++;
 
         if (directed) {
             edgesCount++;
         } else {
-            insertEdge(y, x, true);
+            insertEdge(node2Id, node1Id, true);
         }
+    }
+
+    public EdgeNode[] getEdges() {
+        return edges;
+    }
+
+    public int[] getDegree() {
+        return degree;
+    }
+
+    public int getVerticesCount() {
+        return verticesCount;
+    }
+
+    public int getEdgesCount() {
+        return edgesCount;
+    }
+
+    public boolean isDirected() {
+        return directed;
     }
 
     @Override
@@ -51,7 +75,7 @@ public class Graph {
             sb.append(i).append("[").append(degree[i]).append("]: ");
             var edge = edges[i];
             while (edge != null) {
-                sb.append(edge.getValue()).append(" -> ");
+                sb.append("V_").append(vertices[edge.getNodeId()]).append(" -> ");
                 edge = edge.getNext();
             }
             sb.replace(sb.length() - 4, sb.length(), "\n");
