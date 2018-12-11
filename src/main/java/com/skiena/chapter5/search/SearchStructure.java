@@ -1,28 +1,26 @@
-package com.skiena.chapter5.bfs;
+package com.skiena.chapter5.search;
 
 import com.skiena.chapter5.dto.Vertex;
 import com.skiena.chapter5.dto.VertexState;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-public class BfsStructure {
+public abstract class SearchStructure {
 
     private final Vertex vStart;
 
     private final VertexState[] state;
     private final Vertex[] parent;
 
-    private final Queue<Vertex> queue;
-
-    public BfsStructure(Vertex vStart, int verticesCount) {
+    public SearchStructure(Vertex vStart, int verticesCount) {
         this.vStart = vStart;
 
         state = new VertexState[verticesCount + 1];
         parent = new Vertex[verticesCount + 1];
-        queue = new LinkedList<>();
 
         // initialize
         for (int i = 0; i <= verticesCount; i++) {
@@ -31,31 +29,29 @@ public class BfsStructure {
         }
     }
 
-    public void markDiscovered(Vertex discoverer, Vertex vertex) {
+    void markDiscovered(Vertex discoverer, Vertex vertex) {
         state[vertex.getId()] = VertexState.DISCOVERED;
         parent[vertex.getId()] = discoverer;
-        queue.add(vertex);
+        rememberVertex(vertex);
     }
 
-    public void markProcessed(Vertex vertex) {
+    void markProcessed(Vertex vertex) {
         state[vertex.getId()] = VertexState.PROCESSED;
     }
 
-    public boolean isUndiscovered(Vertex vertex) {
+    boolean isUndiscovered(Vertex vertex) {
         return state[vertex.getId()] == VertexState.UNDISCOVERED;
     }
 
-    public boolean isProcessed(Vertex vertex) {
+    boolean isProcessed(Vertex vertex) {
         return state[vertex.getId()] == VertexState.PROCESSED;
     }
 
-    public boolean isDone() {
-        return queue.isEmpty();
-    }
+    protected abstract void rememberVertex(Vertex vertex);
 
-    public Vertex getNextDiscoverer() {
-        return queue.poll();
-    }
+    protected abstract boolean isDone();
+
+    protected abstract Vertex getNextDiscoverer();
 
     /*
      * Technical.
