@@ -1,8 +1,8 @@
-package com.skiena.chapter5.search.pseudodfs;
+package com.skiena.chapter5.search.java.bfs;
 
 import com.skiena.chapter5.dto.Vertex;
 
-public class PseudoDfsPrint extends PseudoDfsAlgorithm {
+public class JavaBfsPrint extends JavaBFSAlgorithm {
 
     @Override
     protected void process_Vertex_Early(Vertex vertex) {

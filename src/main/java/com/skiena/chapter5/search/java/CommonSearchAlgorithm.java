@@ -1,10 +1,10 @@
-package com.skiena.chapter5.search;
+package com.skiena.chapter5.search.java;
 
 import com.skiena.chapter5.dto.EdgeNode;
 import com.skiena.chapter5.dto.Graph;
 import com.skiena.chapter5.dto.Vertex;
 
-public abstract class SearchAlgorithm<S extends SearchStructure> {
+public abstract class CommonSearchAlgorithm<S extends CommonSearchStructure> {
 
     public void search(Graph g, Vertex firstVertex, S state) {
         state.markDiscovered(null, firstVertex);

@@ -1,12 +1,12 @@
-package com.skiena.chapter5.search.bfs;
+package com.skiena.chapter5.search.java.bfs;
 
 import com.skiena.chapter5.dto.Vertex;
-import com.skiena.chapter5.search.SearchStructure;
+import com.skiena.chapter5.search.java.CommonSearchStructure;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BfsStructure extends SearchStructure {
+public class BfsStructure extends CommonSearchStructure {
 
     private final Queue<Vertex> queue;
 

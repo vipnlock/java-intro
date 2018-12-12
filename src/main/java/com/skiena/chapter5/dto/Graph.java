@@ -93,7 +93,9 @@ public class Graph {
                 sb.append("V_").append(vertices[edge.getVertexId()]).append(" -> ");
                 edge = edge.getNext();
             }
-            sb.replace(sb.length() - 4, sb.length(), "\n");
+            if (sb.lastIndexOf(" -> ") == sb.length() - 4) {
+                sb.replace(sb.length() - 4, sb.length(), "\n");
+            }
         }
         return sb.toString();
     }

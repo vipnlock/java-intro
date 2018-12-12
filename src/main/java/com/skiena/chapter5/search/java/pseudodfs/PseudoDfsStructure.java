@@ -1,10 +1,10 @@
-package com.skiena.chapter5.search.pseudodfs;
+package com.skiena.chapter5.search.java.pseudodfs;
 
 import ch.hsr.lecture09.stack.Stack;
 import com.skiena.chapter5.dto.Vertex;
-import com.skiena.chapter5.search.SearchStructure;
+import com.skiena.chapter5.search.java.CommonSearchStructure;
 
-public class PseudoDfsStructure extends SearchStructure {
+public class PseudoDfsStructure extends CommonSearchStructure {
 
     private final Stack<Vertex> stack;
 

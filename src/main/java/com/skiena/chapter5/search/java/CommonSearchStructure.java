@@ -1,4 +1,4 @@
-package com.skiena.chapter5.search;
+package com.skiena.chapter5.search.java;
 
 import com.skiena.chapter5.dto.Vertex;
 import com.skiena.chapter5.dto.VertexState;
@@ -9,14 +9,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class SearchStructure {
+public abstract class CommonSearchStructure {
 
     private final Vertex vStart;
 
     private final VertexState[] state;
     private final Vertex[] parent;
 
-    public SearchStructure(Vertex vStart, int verticesCount) {
+    public CommonSearchStructure(Vertex vStart, int verticesCount) {
         this.vStart = vStart;
 
         state = new VertexState[verticesCount + 1];
