@@ -10,20 +10,17 @@ import org.junit.jupiter.api.Test;
  */
 class TypeErasureRestrictions<T> {
 
-    @Test
     @DisplayName("ERROR: type-argument cannot be of primitive type")
     void test1() {
 //        Stack<int> intStack;
     }
 
-    @Test
     @DisplayName("ERROR: No new")
     void test4() {
 //        new T();                  // ERROR: Cannot instantiate type parameter directly
 //        T[] array = new T[100];   // ERROR: Cannot instantiate array of type variable
     }
 
-    @Test
     @DisplayName("ERROR: no instanceof with type-variables")
     void test2(Object x) {
 //        if (x instanceof T) {
@@ -33,7 +30,6 @@ class TypeErasureRestrictions<T> {
     /*
      * Type-Casts zu T sind ungeprüft.
      */
-    @Test
     @DisplayName("WARNING: type casts are not checked for type-variables")
     void test3(Object x) {
         T y = (T) x;
@@ -42,7 +38,6 @@ class TypeErasureRestrictions<T> {
     /*
      * Type-Casts zu T[] sind ungeprüft.
      */
-    @Test
     @DisplayName("WARNING: Array type casts are not checked")
     void test5() {
         T[] array2 = (T[]) new Object[100];

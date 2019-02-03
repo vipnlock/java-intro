@@ -103,7 +103,7 @@ public class ThreadPoolTest {
 
         ThreadPoolExecutor tpExecutor = (ThreadPoolExecutor) executor;
         // the cached thread pool may grow without bounds to accommodate any amount of submitted tasks
-        assertEquals(3, tpExecutor.getCorePoolSize());
+        assertEquals(3, tpExecutor.getPoolSize());
         // The queue size in the example above will always be zero because internally a SynchronousQueue instance is used.
         // In a SynchronousQueue, pairs of insert and remove operations always occur simultaneously, so the queue never actually contains anything.
         assertEquals(0, tpExecutor.getQueue().size());

@@ -21,9 +21,9 @@ import org.junit.jupiter.api.Test;
  */
 public class InputOutputTest {
 
-    private static final String BINARY_FILE = "target/test-classes/ch/hsr/lecture12/InputOutputTest.class";
-    private static final String UTF_8_FILE = "src/test/resources/lecture12/test_utf8.txt";
-    private static final String UTF_16_FILE = "src/test/resources/lecture12/test_utf16.txt";
+    private static final String BINARY_FILE = "target/test-classes/ch/study/hsr/lecture12/InputOutputTest.class";
+    private static final String UTF_8_FILE = "src/test/resources/hsr/lecture12/test_utf8.txt";
+    private static final String UTF_16_FILE = "src/test/resources/hsr/lecture12/test_utf16.txt";
 
     @Test
     @DisplayName("Byte stream read: Binary file input")
