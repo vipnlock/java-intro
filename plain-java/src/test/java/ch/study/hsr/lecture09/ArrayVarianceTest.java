@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import ch.study.hsr.lecture09.stack.ArrayStackCastArray;
 import ch.study.hsr.lecture09.stack.ArrayStackCastElement;
 
-public class ArrayVarianceTest {
+class ArrayVarianceTest {
 
     @Test
     @DisplayName("Invalid internal cast of array")
-    public void arrayStackCastArray() {
+    void arrayStackCastArray() {
         var stack = new ArrayStackCastArray<String>(3);
         stack.push("A");
         stack.push("B");

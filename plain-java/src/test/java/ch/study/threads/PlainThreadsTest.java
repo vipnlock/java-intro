@@ -20,6 +20,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -98,7 +99,7 @@ public class PlainThreadsTest {
         // now the future is finally done
         assertTrue(future.isDone());
 
-        assertEquals("Thread \"pool-1-thread-1\"", result);
+        assertThat(result).matches(Pattern.compile("Thread \"pool-\\d-thread-\\d\""));
     }
 
     @Test
