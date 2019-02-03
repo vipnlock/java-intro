@@ -12,33 +12,19 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Main {
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-    public static final String UTF_8_FILE = "src/main/resources/lecture12/test_utf8.txt";
-    public static final String UTF_16_FILE = "src/main/resources/lecture12/test_utf16.txt";
+public class InputOutputTest {
 
-    public static void main(String[] argv) {
-        var main = new Main();
+    public static final String UTF_8_FILE = "src/test/resources/lecture12/test_utf8.txt";
+    public static final String UTF_16_FILE = "src/test/resources/lecture12/test_utf16.txt";
 
-        try {
-//            main.test1_fileInput();
-//            main.test2_fileOutput();
-//            main.test3_fileReader();
-//            main.test3_byteStreamFileReader();
-//            main.test4_fileWriter();
-//            main.test5_LinewiseRead();
-//            main.test6_ReadAll();
-            main.test7_ReadAllWithStreamApi();
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
-        }
-    }
-
-    private void test1_fileInput() throws IOException {
-        System.out.println("=== test1_fileInput");
-
-        try (var in = new FileInputStream(
-                "target/classes/ch/hsr/lecture12/Main.class")) {    // try-with-resources - auto-close, since 1.7
+    @Test
+    @DisplayName("Binary file input")
+    void fileInput() throws IOException {
+        // try-with-resources - auto-close, since 1.7
+        try (var in = new FileInputStream("target/test-classes/ch/hsr/lecture12/InputOutputTest.class")) {
             int i = 0;
 
             int value;
@@ -57,9 +43,9 @@ public class Main {
         }
     }
 
-    private void test2_fileOutput() throws IOException {
-        System.out.println("=== test2_fileOutput");
-
+    @Test
+    @DisplayName("Binary file output")
+    void fileOutput() throws IOException {
         try (var out = new FileOutputStream("target/test.bin")) {
             for (int i = 0; i < 1000; i++) {
                 out.write(i % 256);         // integer instead of byte: no cast on file copying
@@ -68,10 +54,10 @@ public class Main {
     }
 
     // since 11
-    private void test3_fileReader() throws IOException {
-        System.out.println("=== test3_fileReader");
-        try (var reader = new FileReader(UTF_16_FILE,
-                Charset.forName("UTF-16"))) { // system dependent character set
+    @Test
+    @DisplayName("File Reader")
+    void fileReader() throws IOException {
+        try (var reader = new FileReader(UTF_16_FILE, Charset.forName("UTF-16"))) { // system dependent character set
             System.out.println("Default encoding: " + reader.getEncoding());
 
             int value;
@@ -84,9 +70,9 @@ public class Main {
     }
 
     // older java versions: bridge class: InputStreamReader <- FileInputStream
-    private void test3_byteStreamFileReader() throws IOException {
-        System.out.println("=== test3_byteStreamFileReader");
-
+    @Test
+    @DisplayName("Byte Stream File Reader")
+    void byteStreamFileReader() throws IOException {
         try (var reader = new InputStreamReader(
                 new FileInputStream(UTF_16_FILE), StandardCharsets.UTF_16)) { // system dependent character set
             System.out.println("Default encoding: " + reader.getEncoding());
@@ -100,8 +86,9 @@ public class Main {
         }
     }
 
-    private void test4_fileWriter() throws IOException {
-        System.out.println("=== test4_fileWriter");
+    @Test
+    @DisplayName("File Writer")
+    void fileWriter() throws IOException {
         try (var writer = new FileWriter("target/test.txt", true)) {
             writer.write("Hello!");
             writer.write('\n');
@@ -109,8 +96,9 @@ public class Main {
     }
 
     // buffering: BufferedReader
-    private void test5_LinewiseRead() throws IOException {
-        System.out.println("=== test5_LinewiseRead");
+    @Test
+    @DisplayName("Buffered reader")
+    void linewiseRead() throws IOException {
         try (var reader = new BufferedReader(new FileReader(UTF_16_FILE, Charset.forName("UTF-16")))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -120,17 +108,18 @@ public class Main {
     }
 
     // since java 8
-    private void test6_ReadAll() throws IOException {
-        System.out.println("=== test6_ReadAll");
+    @Test
+    @DisplayName("Read all")
+    void ReadAll() throws IOException {
         for (String line : Files.readAllLines(Path.of(UTF_16_FILE), Charset.forName("UTF-16"))) {
             System.out.println(line);
         }
     }
 
     // since 11
-    private void test7_ReadAllWithStreamApi() throws IOException {
-        System.out.println("=== test7_ReadAllWithStreamApi");
-
+    @Test
+    @DisplayName("Read all with Stream API")
+    void ReadAllWithStreamApi() throws IOException {
         Files.lines(Path.of(UTF_16_FILE), Charset.forName("UTF-16"))
              .forEach(System.out::println);
     }

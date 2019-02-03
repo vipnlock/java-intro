@@ -2,7 +2,7 @@ package ch.hsr.commons.graphik;
 
 public class Circle implements Graphik {
     @Override
-    public void draw() {
-        System.out.println("Circle");
+    public String draw() {
+        return "Circle";
     }
 }

@@ -1,9 +1,14 @@
 package ch.hsr.lecture10;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import ch.hsr.commons.person.Person;
 import ch.hsr.commons.person.Samples;
@@ -22,53 +27,46 @@ import ch.hsr.commons.person.Samples;
  * -> variable defined in enclosing scope
  * -> effectively final
  */
-public class Main {
+class LambdasTest {
 
-    public static void main(String[] argv) {
-        Main main = new Main();
+    @Test
+    @DisplayName("Sort Comparable objects (compareTo method)")
+    void sortWithComparator() {
+        final List<Person> people = Samples.getPeopleList();
 
-//        main.test1_Comparator();
-//        main.test2_MethodReferences();
-//        main.test3_FunctionalInterface();
-//        main.test4_Lambda();
-
-        // Inverse Programmierung mit Seiteneffekten.
-        // Method escaping - das potenzielle Überleben der Umgebung
-        // Closure - effectively final (automatisch final dahinter)
-//        main.test5_ForEach();
-
-        // Counter - auf den Heap bringen.
-        main.test6_ForEachWithCounter();
-    }
-
-    private void test1_Comparator() {
-        System.out.println("=== test1_Comparator");
-        List<Person> people = Samples.getPeopleList();
         Collections.sort(people);
-        System.out.println(people);
+
+        for (int i = 0; i < people.size() - 1; i++) {
+            assertThat(people.get(i).getAge()).isLessThanOrEqualTo(people.get(i + 1).getAge());
+        }
     }
 
-    private void test2_MethodReferences() {
-        System.out.println("=== test2_MethodReferences");
+    @Test
+    @DisplayName("Sort by given method reference")
+    void methodReferences() {
         List<Person> people = Samples.getPeopleList();
 
         people.sort(this::compareByAge);
-        System.out.println(people);
+        for (int i = 0; i < people.size() - 1; i++) {
+            assertThat(people.get(i).getAge()).isLessThanOrEqualTo(people.get(i + 1).getAge());
+        }
 
         people.sort(this::compareByCity);
-        System.out.println(people);
+        for (int i = 0; i < people.size() - 1; i++) {
+            assertThat(people.get(i).getCity()).isLessThanOrEqualTo(people.get(i + 1).getCity());
+        }
     }
 
-    private void test3_FunctionalInterface() {
-        System.out.println("=== test3_FunctionalInterface");
-
-        // Poly-Type
+    @Test
+    @DisplayName("Functional interface: Poly-Type")
+    void functionalInterface() {
         MyComparator comparator = this::compareByAge;
         Comparator<Person> comparator2 = this::compareByAge;
     }
 
-    private void test4_Lambda() {
-        System.out.println("=== test4_Lambda");
+    @Test
+    @DisplayName("Sort by lambdas")
+    void Lambda() {
         List<Person> people = Samples.getPeopleList();
 
         people.sort((Person person1, Person person2) -> {
@@ -98,23 +96,32 @@ public class Main {
      * Method escaping - das potenzielle Überleben der Umgebung
      * Closure - effectively final (automatisch final dahinter)
      */
-    private void test5_ForEach() {
-        System.out.println("=== test5_ForEach");
+    @Test
+    @DisplayName("Method escaping")
+    void testMethodEscaping() {
         var list = List.of("A", "B", "C");
 
         list.forEach(System.out::println);
 
-        String prefixClosure = "Item: ";
         list.forEach(methodEscaping());
     }
 
-    private void test6_ForEachWithCounter() {
+    /*
+     * Counter - auf den Heap bringen
+     */
+    @Test
+    @DisplayName("Method escaping + Closure")
+    void forEachWithCounter() {
         System.out.println("=== test6_ForEachWithCounter");
         var list = List.of("A", "B", "C");
 
         list.forEach(methodEscapingWithCounter());
         list.forEach(methodEscapingWithCounter());
     }
+
+    /*
+     * Helper methods.
+     */
 
     private int compareByAge(Person person1, Person person2) {
         return Integer.compare(person1.getAge(), person2.getAge());

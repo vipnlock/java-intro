@@ -22,7 +22,7 @@ public class Sortieren {
         // java sort
         start = System.nanoTime();
         Arrays.sort(ArrayUtilities.getTestArray(NUMBER));
-        System.out.println("Java dual pivor quick sort: " + ((System.nanoTime() - start) / 1_000_000) + " ms");
+        System.out.println("Java dual pivot quick sort: " + ((System.nanoTime() - start) / 1_000_000) + " ms");
     }
 
     private void bubbleSort(int[] array) {

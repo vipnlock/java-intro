@@ -1,5 +1,6 @@
 package ch.hsr.lecture11;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
@@ -8,10 +9,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import ch.hsr.commons.person.Person;
 import ch.hsr.commons.person.Samples;
@@ -34,30 +37,12 @@ import ch.hsr.commons.person.Samples;
  * Automatische Parallelisierung (Seiteneffekte verboten)
  * Collectors
  */
-public class Main {
+class StreamApiTest {
 
-    public static void main(String[] argv) {
-        var main = new Main();
-
-//        main.test1_StreamApi();
-//        main.test2_AlternativeNotation();
-
-//        main.test3_FiniteSources();
-//        main.test3_InfiniteSources();
-        // Zwischenoperationen, Terminaloperationen
-//        main.test3_middleActionsWithPrimitives();
-//        main.test3_middleActions();
-
-        // Demo of PULL-Style pipeline.
-//        main.test4_amountCalls();
-
-//        main.test5_Parallelize();
-        main.test6_Grouping();
-    }
-
-    private void test1_StreamApi() {
-        System.out.println("=== test1_StreamApi");
-        List<Person> people = Samples.getPeopleList();
+    @Test
+    @DisplayName("Demo Stream API")
+    void demoStreamApi() {
+        final List<Person> people = Samples.getPeopleList();
 
         // Chaining / Fluent interface
         people.stream()
@@ -67,9 +52,10 @@ public class Main {
               .forEach(System.out::println);
     }
 
-    private void test2_AlternativeNotation() {
-        System.out.println("=== test2_AlternativeNotation");
-        List<Person> people = Samples.getPeopleList();
+    @Test
+    @DisplayName("Demo Stream API alternative notation")
+    void demoAlternativeNotation() {
+        final List<Person> people = Samples.getPeopleList();
 
         Stream<Person> stream1 = people.stream();
         Stream<Person> stream2 = stream1.filter(p -> p.getAge() >= 18);
@@ -82,13 +68,15 @@ public class Main {
     /*
      * Endliche Quellen.
      */
-    private void test3_FiniteSources() {
-        System.out.println("=== test3_FiniteSources");
+    @Test
+    @DisplayName("Demo finite sources")
+    void demoFiniteSources() {
         IntStream stream1 = IntStream.range(1, 100);
         stream1.forEach(System.out::println);
 
         Stream<Integer> stream2 = Stream.of(2, 3, 5, 7, 11, 13);
         Stream<Integer> stream3 = Stream.<Integer>empty();
+
         // collection.stream()
         Stream stream5 = Stream.concat(stream2, stream3);
     }
@@ -96,31 +84,35 @@ public class Main {
     /*
      * Unendliche Quelle - Lazy evaluation.
      */
-    private void test3_InfiniteSources() {
-        System.out.println("=== test3_InfiniteSources");
-
+    @Test
+    @DisplayName("Demo infinite sources")
+    void InfiniteSources() {
         Random random = new Random();
         Supplier<Integer> supplier = random::nextInt;
 
+        // demo 1
         Stream.generate(supplier)
               .filter(x -> x % 3 == 0)
               .limit(10)
               .forEach(System.out::println);
         System.out.println();
 
+        // demo 2
         IntStream.generate(() -> random.nextInt())
                  .filter(x -> x % 3 == 0)
                  .limit(10)
                  .forEach(System.out::println);
         System.out.println();
 
+        // demo 3
         new Random().ints()
                     .filter(x -> x % 3 == 0)
                     .limit(10)
                     .forEach(System.out::println);
         System.out.println();
 
-        // Pull-Style Logic - Es wird nichts gemacht, solange niemand das habe will
+        // demo 4
+        // Pull-Style Logic - Es wird nichts gemacht, solange niemand das haben will
         // -> Lazy Evaluation (rückwärts aufgespannt)
         IntStream.iterate(0, i -> i + 1)
                  .filter(x -> x % 3 == 0)
@@ -132,9 +124,9 @@ public class Main {
      * Zwischenoperationen für Primitives.
      * Terminaloperationen.
      */
-    private void test3_middleActionsWithPrimitives() {
-        System.out.println("=== test3_middleActionsWithPrimitives");
-
+    @Test
+    @DisplayName("Intermediate actions with primitives")
+    void intermediateActionsWithPrimitives() {
         OptionalDouble optionalDouble = Samples.getPeopleList()
                                                .stream()
                                                .mapToInt(Person::getAge)
@@ -152,9 +144,8 @@ public class Main {
      * Zwischenoperationen für Primitives.
      * Terminaloperationen.
      */
-    private void test3_middleActions() {
-        System.out.println("=== test3_middleActions");
-
+    @Test
+    void intermediateActions() {
         final Predicate<Person> ageFilter = p -> p.getAge() >= 18;
         final Function<Person, String> toName = p -> p.getFirstName() + " " + p.getLastName();
         final Consumer<String> printIt = System.out::println;
@@ -173,8 +164,9 @@ public class Main {
      * Demo of PULL-Style pipeline.
      */
     private static int counter;
-    private void test4_amountCalls() {
-        System.out.println("=== test4_amountCalls");
+    @Test
+    @DisplayName("Demo: pull-style pipeline")
+    void amountCalls() {
         IntStream.iterate(0, i -> {
             var result = i + 1;
             System.out.println("Step A: " + result);
@@ -195,9 +187,9 @@ public class Main {
      * Seiteneffekte prohibited
      */
     private static int counter2;
-    private void test5_Parallelize() {
-        System.out.println("=== test5_Parallelize");
-
+    @Test
+    @DisplayName("Demo: parallel streams")
+    void Parallelize() {
         Samples.getPeopleList()
                .parallelStream()
                .filter(p -> {
@@ -209,19 +201,34 @@ public class Main {
                .ifPresent(System.out::println);
     }
 
-    private void test6_Grouping() {
-        System.out.println("=== test6_Grouping");
+    @Test
+    @DisplayName("Demo: grouping")
+    void Grouping() {
         Map<Integer, List<Person>> peopleByAge = Samples.getPeopleList()
-                .stream()
-                .collect(Collectors.groupingBy(Person::getAge));
-
+                                                        .stream()
+                                                        .collect(Collectors.groupingBy(Person::getAge));
         System.out.println(peopleByAge);
 
         // Agregations as in SQL
         Map<String, Integer> totalAgeByCity = Samples.getPeopleList()
-                .stream()
-                .collect(Collectors.groupingBy(Person::getCity, Collectors.summingInt(Person::getAge)));
+                                                     .stream()
+                                                     .collect(Collectors.groupingBy(Person::getCity, Collectors.summingInt(Person::getAge)));
         System.out.println(totalAgeByCity);
+    }
+
+    @Test
+    @DisplayName("Demo: group by and count")
+    void groupingBy() {
+        List<String> list = new ArrayList<>();
+
+        list.add("Hello");
+        list.add("Hello");
+        list.add("World");
+
+        Map<String, Long> counted = list.stream()
+                                        .collect(Collectors.groupingBy(str -> str.substring(3,4), Collectors.counting()));
+
+        System.out.println(counted);
     }
 
 }
