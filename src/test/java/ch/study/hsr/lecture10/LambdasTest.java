@@ -16,12 +16,16 @@ import ch.study.commons.person.Samples;
 /**
  * Lambdas.
  *
+ * Motivation: interface Comparable - unneeded coupling.
+ *
  * Inverse Programmierung.
  * Inverse Programmierung mit Seiteneffekten.
- * Höherwertige Funktionen.
- * Methodenreferenz.
- * Anonyme Methode.
+ * Höherwertige Funktionen - its in/out-parameter(-s) is another function
+ *
+ * Methodenreferenz does not have a specific type, it's poly-type of FunctionalInterfaces
+ * Lambda - Anonyme Methode (adhoc method)
  * Type Inferenz.
+ *
  * Seiten-Effekte.
  * Closure
  * -> variable defined in enclosing scope
@@ -30,7 +34,7 @@ import ch.study.commons.person.Samples;
 class LambdasTest {
 
     @Test
-    @DisplayName("Sort Comparable objects (compareTo method)")
+    @DisplayName("Motivation: Sort Comparable objects (compareTo method) - unneeded coupling")
     void sortWithComparator() {
         final List<Person> people = Samples.getPeopleList();
 
@@ -81,14 +85,25 @@ class LambdasTest {
         // one expression:
         people.sort((person1, person2) -> Integer.compare(person1.getAge(), person2.getAge()));
 
-        // Instanz-Methode wird statifiziert:
-        people.sort(Person::compareTo);     // people.sort((this, y) -> this.compareTo(y));
+        System.out.println(people);
+    }
 
-        // Comparator building block:
+    @Test
+    @DisplayName("Instanz-Methode wird statifiziert")
+    void lambdaStatifizierung() {
+        List<Person> people = Samples.getPeopleList();
+
+        people.sort(Person::compareTo);     // people.sort((this, y) -> this.compareTo(y));
+    }
+
+    @Test
+    @DisplayName("Comparator building blocks")
+    void lambdaComparators() {
+        List<Person> people = Samples.getPeopleList();
+
         people.sort(Comparator.comparing(Person::getCity)
                               .thenComparing(Person::getLastName)
                               .reversed());
-        System.out.println(people);
     }
 
     /*
@@ -97,11 +112,9 @@ class LambdasTest {
      * Closure - effectively final (automatisch final dahinter)
      */
     @Test
-    @DisplayName("Method escaping")
+    @DisplayName("Method escaping + effectively final")
     void testMethodEscaping() {
         var list = List.of("A", "B", "C");
-
-        list.forEach(System.out::println);
 
         list.forEach(methodEscaping());
     }
@@ -110,9 +123,8 @@ class LambdasTest {
      * Counter - auf den Heap bringen
      */
     @Test
-    @DisplayName("Method escaping + Closure")
+    @DisplayName("Method escaping + static closure")
     void forEachWithCounter() {
-        System.out.println("=== test6_ForEachWithCounter");
         var list = List.of("A", "B", "C");
 
         list.forEach(methodEscapingWithCounter());
@@ -132,14 +144,21 @@ class LambdasTest {
     }
 
 
+    /*
+     * Effectively final variable.
+     * prefixClosure is closure - variable defined in enclosing scope.
+     * Environment variable "prefixClosure" and Lambda have different life time.
+     * prefixClosure wird durch den Compiler fix reingenommen.
+     */
     private static Consumer<String> methodEscaping() {
         String prefixClosure = "Item: ";
         return x -> System.out.println(prefixClosure + x);
     }
 
     /*
+     * Static stuff kommt als Hilfsobjekt auf den Heap in Java.
      * counter - is also a closure (variable defined in enclosing scope),
-     * not from local variable, but from (surrounding) class
+     * comes not from local variable of the enclosing function, but from (surrounding) class
      */
     private static int counter;
     private static Consumer<String> methodEscapingWithCounter() {

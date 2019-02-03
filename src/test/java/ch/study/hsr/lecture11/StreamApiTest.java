@@ -25,14 +25,15 @@ import ch.study.commons.person.Samples;
  *
  * -> Imperative Denken (wie?) -> Declarative Denken (was?)
  * -> Wunschkonzept
- * Data-Flow / Pipeline; Chaining / Fluent interface
+ *
+ * Data-Flow / Pipeline;
+ * Bevorzugte Schreibweise: Chaining / Fluent interface
  * -> Source (finite, infinite)
  * -> Intermediate operations
  * -> Terminal operations
  *
  * Push-Stype Logic - Reactive programming
- * Pull-Style Logic - Es wird nichts gemacht, solange niemand das habe will
- * -> Lazy Evaluation (rückwärts aufgespannt)
+ * Pull-Style Logic - Lazy Evaluation (rückwärts aufgespannt) - Es wird nichts gemacht, solange niemand das haben will
  *
  * Automatische Parallelisierung (Seiteneffekte verboten)
  * Collectors
@@ -40,7 +41,7 @@ import ch.study.commons.person.Samples;
 class StreamApiTest {
 
     @Test
-    @DisplayName("Demo Stream API")
+    @DisplayName("Demo Stream API: chaining")
     void demoStreamApi() {
         final List<Person> people = Samples.getPeopleList();
 
@@ -53,7 +54,7 @@ class StreamApiTest {
     }
 
     @Test
-    @DisplayName("Demo Stream API alternative notation")
+    @DisplayName("Demo Stream API: alternative notation")
     void demoAlternativeNotation() {
         final List<Person> people = Samples.getPeopleList();
 
@@ -77,7 +78,6 @@ class StreamApiTest {
         Stream<Integer> stream2 = Stream.of(2, 3, 5, 7, 11, 13);
         Stream<Integer> stream3 = Stream.<Integer>empty();
 
-        // collection.stream()
         Stream stream5 = Stream.concat(stream2, stream3);
     }
 
@@ -121,8 +121,8 @@ class StreamApiTest {
     }
 
     /*
-     * Zwischenoperationen für Primitives.
-     * Terminaloperationen.
+     * Intermediate operations for primitives.
+     * Terminal operations.
      */
     @Test
     @DisplayName("Intermediate actions with primitives")
@@ -141,10 +141,11 @@ class StreamApiTest {
     }
 
     /*
-     * Zwischenoperationen für Primitives.
-     * Terminaloperationen.
+     * Intermediate operations.
+     * Terminal operations.
      */
     @Test
+    @DisplayName("Intermediate actions")
     void intermediateActions() {
         final Predicate<Person> ageFilter = p -> p.getAge() >= 18;
         final Function<Person, String> toName = p -> p.getFirstName() + " " + p.getLastName();
@@ -162,6 +163,8 @@ class StreamApiTest {
 
     /*
      * Demo of PULL-Style pipeline.
+     * Pipeline wird zuerst aufmodelliert und dann mit der Terminaloperation gestartet.
+     * Lazy evaluation - rückwärts aufgespannt./
      */
     private static int counter;
     @Test

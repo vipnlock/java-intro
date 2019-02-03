@@ -2,10 +2,11 @@ package ch.study.hsr.lecture09;
 
 import ch.study.hsr.lecture09.stack.Stack;
 
-class Lecture09Helper {
+class GenericsHelper {
 
     /*
      * Generics helper.
+     * <E> - forward declaration style
      */
     static <E> Stack<E> multiPush(E value, E value2, int times) {
         var result = new Stack<E>();

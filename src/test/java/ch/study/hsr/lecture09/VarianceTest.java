@@ -1,7 +1,7 @@
 package ch.study.hsr.lecture09;
 
-import static ch.study.hsr.lecture09.Lecture09Helper.moveCo;
-import static ch.study.hsr.lecture09.Lecture09Helper.moveContra;
+import static ch.study.hsr.lecture09.GenericsHelper.moveCo;
+import static ch.study.hsr.lecture09.GenericsHelper.moveContra;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,19 +14,22 @@ import ch.study.hsr.lecture09.stack.Stack;
 public class VarianceTest {
 
     @Test
-    @DisplayName("ERROR: Invariance")
+    @DisplayName("ERROR: Generische Invarianz: Invariance")
     void invariance() {
-        // Stack<Graphik> stack = new Stack<Rectangle>();
+        // that could lead to heap pollution
+//         Stack<Graphik> stack = new Stack<Rectangle>();
     }
 
     @Test
-    @DisplayName("Zuweisungskompatibilität aufweichen: Covariance")
+    @DisplayName("Covariance: Zuweisungskompatibilität aufweichen")
     void covariance() {
         Stack<Rectangle> origin = new Stack<>();
         origin.push(new Square());
         origin.push(new Rectangle());
 
-        // Co-variance, not type bounds
+        // Co-variance
+        // "? extends Graphik" is not a type bound, it is a specific usage
+        // make it lockerer Richtung Sub-Klassen
         Stack<? extends Graphik> relaxed = origin;  // more flexible Graphik Stack
         // relaxed = new Stack<Graphik>();    // OK: hier kommt the Graphic
         // relaxed = new Stack<Circle>();     // OK: oder ein Subtyp von Graphik
@@ -36,11 +39,14 @@ public class VarianceTest {
     }
 
     @Test
-    @DisplayName("Zuweisungskompatibilität aufweichen: Contravariance")
+    @DisplayName("Contravariance: Zuweisungskompatibilität aufweichen")
     void contravariance() {
         var origin = new Stack<Object>();
         origin.push("ABC");
 
+        // Contra-variance
+        // make it lockerer Richtung Basis-Klassen
+        // that is a stack of Rectangle or if its basis class
         Stack<? super Rectangle> relaxed = origin;  // more flexible Rectangle Stack
 
         relaxed.push(new Rectangle());  // OK: write

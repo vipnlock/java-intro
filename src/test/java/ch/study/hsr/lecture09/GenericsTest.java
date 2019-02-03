@@ -12,28 +12,33 @@ import org.junit.jupiter.api.Test;
 import ch.study.commons.graphik.Circle;
 import ch.study.commons.graphik.Rectangle;
 import ch.study.commons.graphik.Square;
-import ch.study.hsr.lecture09.stack.ArrayStackCast1;
-import ch.study.hsr.lecture09.stack.ArrayStackCast2;
 import ch.study.hsr.lecture09.stack.GraphikStack;
 import ch.study.hsr.lecture09.stack.Stack;
 
 /**
  * Generics.
  *
- * Statischer Polymorphismus
- * -> generische Klasse
- * -> generische Schnittstelle
- * -> generische Methode
- * Type Erasure
- * -> Generics limitations
- * Type Bounds:
+ * Generics sind Statischer Polymorphismus.
+ * -> generische Klasse        - mit Typ-Parameter
+ *    generischer Typ          - Ausprägung (Einsatz mit Typ-Argument)
+ *        upper type bound     - e.g. class Abc \<T extends Graphik\>
+ * -> generische Schnittstelle - e.g. Iterable and Iterator
+ * -> generische Methode       -
+ *
+ * Type Erasure (see the class StackTest).
+ * -> proof with decompilation "javap -c Test.class"
+ * -> Generics limitations (see TypeErasureRestrictions)
+ * Heap pollution.
+ *
+ * Type Bounds (see VarianceTest)
  * -> generische Invarianz
  * -> Co-Varianz
  * -> Contra-Varianz
  */
-public class GenericsTest {
+class GenericsTest {
 
     @Test
+    @DisplayName("Generic type")
     void simpleStackOfStrings() {
         var stack = new Stack<String>();
 
@@ -49,6 +54,7 @@ public class GenericsTest {
     }
 
     @Test
+    @DisplayName("Generic interface Iterable")
     void graphikStack() {
         // var stack = new GraphikStack<String>();  - Bounds mismatch
         var stack = new GraphikStack<>();
@@ -64,69 +70,26 @@ public class GenericsTest {
     @DisplayName("Generic method")
     void genericMethod() {
         // type inference: E = String
-        Stack<String> stringStack = Lecture09Helper.multiPush("Hello", "A", 100);
+        Stack<String> stringStack = GenericsHelper.multiPush("Hello", "A", 100);
 
         // type inference: E = Double, E = Integer => compiler goes one level higher => E = Number
-        Stack<Number> numberStack = Lecture09Helper.multiPush(3.141, 123, 3);
+        Stack<Number> numberStack = GenericsHelper.multiPush(3.141, 123, 3);
 
         // manual type declaration
-        var integerStack = Lecture09Helper.<Integer> multiPush(123, 1, 2);
-        var integerStack2 = this.<Integer> multiPush(123, 1, 2);
-    }
-
-    private <E> Stack<E> multiPush(E value, E value2, int times) {
-        var result = new Stack<E>();
-        for (int i = 0; i < times; i++) {
-            result.push(value);
-        }
-        return result;
+        var integerStack = GenericsHelper.<Integer> multiPush(123, 1, 2);
     }
 
     @Test
-    @DisplayName("Invalid internal cast of array")
-    public void arrayStackCastArray() {
-        var stack = new ArrayStackCast1<String>(3);
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
+    @DisplayName("Heap pollution")
+    void testHeapPollution() {
+        var integerStack = new Stack<Integer>();
+        Stack rawStack = integerStack;
 
-        Object[] internals = stack.getInternals();      // OK
+        rawStack.push("ABC");
 
-        // ClassCastException, because it is Object[], not String[]
         assertThrows(ClassCastException.class, () -> {
-            String[] internals2 = stack.getInternals();
-        });
-
-        // ClassCastException, compiler takes that typ from the right side
-        assertThrows(ClassCastException.class, () -> {
-            var internals3 = stack.getInternals();
+            int x = integerStack.pop();
         });
     }
-
-    @Test
-    @DisplayName("Internal cast of element")
-    void test4_arrayStackCastElement() {
-        var stack = new ArrayStackCast2<String>(3);
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
-        assertEquals("C", stack.pop());
-        assertEquals("B", stack.pop());
-        assertEquals("A", stack.pop());
-    }
-
-    @Test
-    @DisplayName("Array Invariance")
-    void arrayInvariance() {
-        String[] specific = new String[100];
-        Object[] general = specific;
-
-        specific[0] = "ABC";
-        general[1] = "DEF";
-        assertThrows(ArrayStoreException.class, () -> {
-            general[2] = 1;
-        });
-    }
-
 
 }

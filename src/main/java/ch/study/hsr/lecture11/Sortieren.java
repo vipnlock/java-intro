@@ -1,31 +1,8 @@
 package ch.study.hsr.lecture11;
 
-import java.util.Arrays;
-
-import ch.study.commons.array.ArrayUtilities;
-
 public class Sortieren {
 
-    private final static int NUMBER = 10_000_000;
-
-    public static void main(String[] argv) {
-        var sMain = new Sortieren();
-
-        long start = System.nanoTime();
-//        sMain.bubbleSort(ArrayUtilities.getTestArray(NUMBER));
-//        System.out.println("Bubble sort: " + ((System.nanoTime() - start) / 1000_000) + " ms");
-
-//        start = System.nanoTime();
-        sMain.quickSort(ArrayUtilities.getTestArray(NUMBER), 0, NUMBER - 1);
-        System.out.println("Quick sort: " + ((System.nanoTime() - start) / 1000_000) + " ms");
-
-        // java sort
-        start = System.nanoTime();
-        Arrays.sort(ArrayUtilities.getTestArray(NUMBER));
-        System.out.println("Java dual pivot quick sort: " + ((System.nanoTime() - start) / 1_000_000) + " ms");
-    }
-
-    private void bubbleSort(int[] array) {
+    static void bubbleSort(int[] array) {
         boolean swapped;
         do {
             swapped = false;
@@ -38,7 +15,7 @@ public class Sortieren {
         } while (swapped);
     }
 
-    private void quickSort(int[] array, int left, int right) {
+    static void quickSort(int[] array, int left, int right) {
         if (right <= left) {
             return;
         }
@@ -66,4 +43,5 @@ public class Sortieren {
         array[index1] = array[index2];
         array[index2] = tmp;
     }
+
 }

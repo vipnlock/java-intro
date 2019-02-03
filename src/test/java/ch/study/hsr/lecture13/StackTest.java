@@ -2,6 +2,8 @@ package ch.study.hsr.lecture13;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,6 +13,13 @@ import java.time.Duration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * - Relevant cases
+ * - Edge cases
+ *
+ * - Many simple test cases
+ * - No dependencies between tests
+ */
 class StackTest {
 
     private static final Duration TIMEOUT = Duration.ofSeconds(3);
@@ -44,12 +53,12 @@ class StackTest {
         assertThrows(StackException.class, stack::pop);
     }
 
-//    @Test
-//    void extraTest() {
-//        assertEquals(127, 127);
-//        assertSame(127, 127);
-//        assertEquals(128, 128);
-//        assertSame(128, 128);
-//    }
+    @Test
+    void extraTest() {
+        assertEquals(127, 127);
+        assertSame(127, 127);
+        assertEquals(128, 128);
+        assertNotSame(128, 128);
+    }
 
 }

@@ -1,5 +1,7 @@
 package ch.study.hsr.lecture12;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,13 +36,14 @@ public class ObjectSerializationTest {
 
     @Test
     void deserializePerson() throws IOException, ClassNotFoundException {
-        try(var stream = new ObjectInputStream(new FileInputStream("src/test/resources/lecture12/person.bin"))) {
+        try(var stream = new ObjectInputStream(new FileInputStream("src/test/resources/hsr/lecture12/person.bin"))) {
             var person = (Person) stream.readObject();  // without constructor - goes in engine
             System.out.println(person);
             System.out.println(person.getColleagues());
 
             // Transitive Serialisierung
-            System.out.println(person.getColleagues().get(0).getColleagues().get(0) == person); // bei XML und Json - aufpassen, hier ist ein Zyklus
+            // bei XML und Json - aufpassen, hier ist ein Zyklus
+            assertSame(person, person.getColleagues().get(0).getColleagues().get(0));
         }
     }
 

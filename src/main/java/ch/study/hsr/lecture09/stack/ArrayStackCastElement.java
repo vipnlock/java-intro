@@ -1,11 +1,11 @@
 package ch.study.hsr.lecture09.stack;
 
-public class ArrayStackCast2<T> {
+public class ArrayStackCastElement<T> {
 
     private Object[] array;
     private int size;
 
-    public ArrayStackCast2(int capacity) {
+    public ArrayStackCastElement(int capacity) {
         this.array = new Object[capacity];
         this.size = 0;
     }

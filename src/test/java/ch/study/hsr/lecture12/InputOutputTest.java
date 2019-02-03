@@ -15,47 +15,55 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Byte streams: 8-bit data: InputStream, OutputStream
+ * Character streams: 16-bit text characters (UTF-16): Reader, Writer
+ */
 public class InputOutputTest {
 
-    public static final String UTF_8_FILE = "src/test/resources/lecture12/test_utf8.txt";
-    public static final String UTF_16_FILE = "src/test/resources/lecture12/test_utf16.txt";
+    private static final String BINARY_FILE = "target/test-classes/ch/hsr/lecture12/InputOutputTest.class";
+    private static final String UTF_8_FILE = "src/test/resources/lecture12/test_utf8.txt";
+    private static final String UTF_16_FILE = "src/test/resources/lecture12/test_utf16.txt";
 
     @Test
-    @DisplayName("Binary file input")
+    @DisplayName("Byte stream read: Binary file input")
     void fileInput() throws IOException {
         // try-with-resources - auto-close, since 1.7
-        try (var in = new FileInputStream("target/test-classes/ch/hsr/lecture12/InputOutputTest.class")) {
-            int i = 0;
+        try (var in = new FileInputStream(BINARY_FILE)) {
+            int byteNumber = 0;
 
             int value;
-            while ((value = in.read()) >= 0) {  // read the next byte [0, 255], unsigned kodiert
+            // read:
+            // - the next byte [0, 255], unsigned kodiert
+            // - -1 - spezielle Semantik, EOF, sentinel value
+            while ((value = in.read()) >= 0) {
                 // byte in memory is signed: [-128, 127]
-                // -1 - spezielle Semantik, EOF, sentinel value
                 byte b = (byte) value;  // least significant 8 bits -> to signed byte, no Datenverlust
 
-                if (i % 16 == 0) {
-                    System.out.printf("%n%04X:", i);
+                if (byteNumber % 16 == 0) {
+                    System.out.printf("%n%04X:", byteNumber);
                 }
                 System.out.printf(" %02X", b);  // work with b
 
-                i++;
+                byteNumber++;
             }
         }
     }
 
     @Test
-    @DisplayName("Binary file output")
+    @DisplayName("Byte stream write: Binary file output")
     void fileOutput() throws IOException {
         try (var out = new FileOutputStream("target/test.bin")) {
             for (int i = 0; i < 1000; i++) {
-                out.write(i % 256);         // integer instead of byte: no cast on file copying
+                // integer instead of byte: no cast on file copying
+                out.write(i % 256);
             }
         }
     }
 
     // since 11
     @Test
-    @DisplayName("File Reader")
+    @DisplayName("Character stream: File Reader")
     void fileReader() throws IOException {
         try (var reader = new FileReader(UTF_16_FILE, Charset.forName("UTF-16"))) { // system dependent character set
             System.out.println("Default encoding: " + reader.getEncoding());
@@ -71,7 +79,7 @@ public class InputOutputTest {
 
     // older java versions: bridge class: InputStreamReader <- FileInputStream
     @Test
-    @DisplayName("Byte Stream File Reader")
+    @DisplayName("Character stream: Byte Stream File Reader")
     void byteStreamFileReader() throws IOException {
         try (var reader = new InputStreamReader(
                 new FileInputStream(UTF_16_FILE), StandardCharsets.UTF_16)) { // system dependent character set
@@ -87,7 +95,7 @@ public class InputOutputTest {
     }
 
     @Test
-    @DisplayName("File Writer")
+    @DisplayName("Character stream: File Writer")
     void fileWriter() throws IOException {
         try (var writer = new FileWriter("target/test.txt", true)) {
             writer.write("Hello!");
@@ -97,7 +105,7 @@ public class InputOutputTest {
 
     // buffering: BufferedReader
     @Test
-    @DisplayName("Buffered reader")
+    @DisplayName("Character stream: Buffered reader")
     void linewiseRead() throws IOException {
         try (var reader = new BufferedReader(new FileReader(UTF_16_FILE, Charset.forName("UTF-16")))) {
             String line;

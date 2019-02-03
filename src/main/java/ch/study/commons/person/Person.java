@@ -8,8 +8,8 @@ import java.util.Objects;
 public class Person implements Comparable<Person>, Serializable {
 
     /**
-     * Magic reserved constant name - version number for this class, is checked during deserialization
-     * coding convention not fulfilled (Grossbuchstaben in Constant-name).
+     * Magic reserved constant name - version number for this class, is checked during deserialization.
+     * BTW coding convention not fulfilled (Grossbuchstaben in Constant-name).
      * data evolution -> not compatible classes:
      * ERROR reason: java.io.InvalidClassException: ch.hsr.commons.person.Person; local class incompatible: stream classdesc serialVersionUID = 1, local class serialVersionUID = 2
      */

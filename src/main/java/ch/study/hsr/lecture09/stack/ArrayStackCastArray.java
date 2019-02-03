@@ -1,11 +1,11 @@
 package ch.study.hsr.lecture09.stack;
 
-public class ArrayStackCast1<T> {
+public class ArrayStackCastArray<T> {
 
     private T[] array;
     private int size;
 
-    public ArrayStackCast1(int capacity) {
+    public ArrayStackCastArray(int capacity) {
         this.array = (T[])new Object[capacity]; // that Cast is not valid, because T is not known in Runtime
         this.size = 0;
     }
